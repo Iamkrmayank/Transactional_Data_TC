@@ -136,6 +136,90 @@ def transactional_visualizations(df):
     st.pyplot(plt.gcf())
     plt.close()
 
+    #-----
+    # Geolocation Segmentation
+    '''def geolocation_segmentation(df):
+        df['Max Product Sold'] = df.groupby('Shipping Address')['Quantity Purchased'].transform('sum')
+
+    # Time-based Segmentation
+    def time_based_segmentation(df):
+        df['Season'] = pd.to_datetime(df['Transaction Date']).dt.month.map({
+            12: 'Christmas Eve', 1: 'New Year', 10: 'Halloween'
+        }).fillna('Other')
+        last_purchase_date = df['Transaction Date'].max()
+        df['Churn'] = (last_purchase_date - pd.to_datetime(df['Transaction Date'])).dt.days > 365
+
+    # Apply segmentation functions
+    customer_segmentation(df)
+    geolocation_segmentation(df)
+    time_based_segmentation(df)
+
+    # High Spend vs Low Spend Buyer
+    st.subheader('High Spend vs Low Spend Buyers')
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='High Spend Buyer', palette='viridis')
+    plt.title('High Spend vs Low Spend Buyers')
+    plt.xlabel('High Spend Buyer')
+    plt.ylabel('Count')
+    plt.xticks([0, 1], ['Low Spend', 'High Spend'])
+    st.pyplot(plt.gcf())
+    plt.close()'''
+
+    # Frequent Buyer vs Occasional Buyer
+    st.subheader('Frequent Buyer vs Occasional Buyer')
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='Frequent Buyer', palette='viridis')
+    plt.title('Frequent Buyer vs Occasional Buyer')
+    plt.xlabel('Frequent Buyer')
+    plt.ylabel('Count')
+    plt.xticks([0, 1], ['Occasional Buyer', 'Frequent Buyer'])
+    st.pyplot(plt.gcf())
+    plt.close()
+
+    # Customer Lifetime Value (CLV)
+    st.subheader('Customer Lifetime Value Distribution')
+    plt.figure(figsize=(10, 6))
+    sns.histplot(df['Total Expenditure(till Date)'], bins=30, kde=True, color='blue')
+    plt.axvline(df['Total Expenditure(till Date)'].quantile(0.75), color='red', linestyle='--', label='CLV Threshold')
+    plt.title('Customer Lifetime Value Distribution')
+    plt.xlabel('Total Expenditure (till Date)')
+    plt.ylabel('Frequency')
+    plt.legend()
+    st.pyplot(plt.gcf())
+    plt.close()
+
+    # Max Product Sold by Geolocation
+    st.subheader('Top 10 Locations by Max Products Sold')
+    plt.figure(figsize=(14, 8))
+    top_locations = df.groupby('Shipping Address')['Max Product Sold'].max().nlargest(10)
+    sns.barplot(x=top_locations.index, y=top_locations.values, palette='viridis')
+    plt.title('Top 10 Locations by Max Products Sold')
+    plt.xlabel('Shipping Address')
+    plt.ylabel('Total Quantity Purchased')
+    plt.xticks(rotation=45)
+    st.pyplot(plt.gcf())
+    plt.close()
+
+    # Seasonal Segmentation
+    st.subheader('Seasonal Segmentation of Transactions')
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='Season', palette='viridis')
+    plt.title('Seasonal Segmentation of Transactions')
+    plt.xlabel('Season')
+    plt.ylabel('Count')
+    st.pyplot(plt.gcf())
+    plt.close()
+
+    # Churn Segmentation
+    st.subheader('Churn Segmentation')
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='Churn', palette='viridis')
+    plt.title('Churn Segmentation')
+    plt.xlabel('Churn')
+    plt.ylabel('Count')
+    plt.xticks([0, 1], ['Not Churned', 'Churned'])
+    st.pyplot(plt.gcf())
+    plt.close()
     # Repeat similar logic for other transactional visualizations...
 
 # Streamlit app layout
